@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="../static/css/display_search.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <meta charset="UTF-8" />
+    <title>Compare Two Players</title>
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+  </head>
+
+  <body style = "background: linear-gradient(to left, #EE7752, #E73C7E, #23A6D5, #23D5AB);">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand">NBA Dataset</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="home">&emsp;Home</a>
+            </li>
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">&emsp;&emsp;Search</a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="searchPage">Search All</a></li>
+                <li><a class="dropdown-item" href="searchCityPage">Search City</a></li>
+                <li><a class="dropdown-item" href="searchPlayerPage">Search Player</a></li>
+                <li><a class="dropdown-item" href="searchTeamPage">Search Team</a></li> 
+                <li><a class="dropdown-item" href="searchGameDetails">Search Game Details</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">&emsp;&emsp;Insert</a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="insert_player">Insert Player</a></li>
+                <li><a class="dropdown-item" href="insert_team">Insert Team</a></li>
+                <li><a class="dropdown-item" href="insert_games_details">Insert Game</a></li> 
+                <li><a class="dropdown-item" href="insert_ranking">Insert Ranking</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">&emsp;&emsp;Delete</a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="delete_player">Delete Player</a></li>
+                <li><a class="dropdown-item" href="delete_team">Delete Team</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">&emsp;&emsp;Update</a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="update_player">Update Player</a></li>
+                <li><a class="dropdown-item" href="update_team">Update Team</a></li>
+                <li><a class="dropdown-item" href="update_player_pts">Update Player Points</a></li>
+                <li><a class="dropdown-item" href="update_team_wins">Update Team Wins</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">&emsp;&emsp;Analytics</a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="top5_win_pct">Top 5 Team Wins</a></li>
+                <li><a class="dropdown-item" href="player_stat">Player Stats</a></li>
+                <li><a class="dropdown-item" href="home_team_stat">Home Team Stats</a></li>
+                <li><a class="dropdown-item" href="top_season_scorer">Top Team Scorer</a></li>
+                <li><a class="dropdown-item" href="compare_two_players">Compare Two Players</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="backup">&emsp;Backup Data</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link disabled"> &emsp; ---></a>
+            </li>
+          </ul>
+          <!-- <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form> -->
+        </div>
+      </div>
+    </nav>
+
+    <h1>Compare Two Players</h1>
+    <div>
+      <div id="chart_div"></div>
+      <div id="table_div"></div>
+      <div id="pie_div"></div>
+    </div>
+
+    <!--Loads in teams obj from utils.py-->
+    {{compare_players | json_script:"player-data"}}
+
+    <script>
+      google.charts.load("current", { packages: ["corechart", "bar"] });
+      google.charts.setOnLoadCallback(drawBasic);
+
+      function drawBasic() {
+        var temp = JSON.parse(
+          document.getElementById("player-data").textContent
+        );
+        let temp_data = [];
+        temp_data.push(["Player", "Field Goal Percentage"]);
+        for (var i = 0; i < temp.length; i++) {
+          temp_data.push([temp[i].player, parseInt(temp[i].fg_pct)]);
+        }
+
+        console.log(temp_data);
+        var data = google.visualization.arrayToDataTable(temp_data);
+
+        var options = {
+          title: "Compare Two Players using FG Pct",
+          chartArea: {
+                    width: '80%',
+                    height: '80%',
+                },
+          hAxis: {
+            title: "",
+            // format: 'h:mm a',
+            viewWindow: {
+              min: [7, 30, 0],
+              max: [17, 30, 0],
+            },
+          },
+          vAxis: {
+            title: "FG Pct",
+          },
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById("chart_div"));
+
+        chart.draw(data, options);
+      }
+    </script>
+
+<script>
+  google.charts.load("current", { packages: ["corechart", "bar"] });
+  google.charts.setOnLoadCallback(drawBasic);
+
+  function drawBasic() {
+    var temp = JSON.parse(
+          document.getElementById("player-data").textContent
+        );
+        let temp_data = [];
+        temp_data.push(["Player", "Field Goal Percentage"]);
+        for (var i = 0; i < temp.length; i++) {
+          temp_data.push([temp[i].player, parseInt(temp[i].fg_pct)]);
+        }
+
+    console.log(temp_data);
+    var data = google.visualization.arrayToDataTable(temp_data);
+
+    var options = {
+      title: "Compare Two Players using FG Pct",
+      chartArea: {
+        width: '100%',
+        height: '100%',
+      },
+      hAxis: {
+        title: "",
+        // format: 'h:mm a',
+        viewWindow: {
+          min: [7, 30, 0],
+          max: [17, 30, 0],
+        },
+      },
+      vAxis: {
+        title: "FG Pct",
+      },
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById("pie_div"));
+
+    chart.draw(data, options);
+  }
+</script>
+
+<script type="text/javascript">
+  google.charts.load('current', { 'packages': ['table'] });
+  google.charts.setOnLoadCallback(drawTable);
+
+  function drawTable() {
+
+    var temp = JSON.parse(
+          document.getElementById("player-data").textContent
+        );
+        let temp_data = [];
+        temp_data.push(["Player", "Field Goal Percentage"]);
+        for (var i = 0; i < temp.length; i++) {
+          temp_data.push([temp[i].player, parseInt(temp[i].fg_pct)]);
+        }
+
+    var data = google.visualization.arrayToDataTable(temp_data);
+
+    data.sort({ column: 1, desc: true });
+
+    var table = new google.visualization.Table(document.getElementById('table_div'));
+
+    table.draw(data, { showRowNumber: true, width: '70%', height: '100%' });
+  }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  </body>
+</html>

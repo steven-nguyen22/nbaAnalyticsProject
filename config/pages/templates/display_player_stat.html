@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="../static/css/display_search.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <meta charset="UTF-8" />
+    <title>Player Stat</title>
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+  </head>
+
+  <body style = "background: linear-gradient(to left, #EE7752, #E73C7E, #23A6D5, #23D5AB);">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand">NBA Dataset</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="home">&emsp;Home</a>
+            </li>
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">&emsp;&emsp;Search</a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="searchPage">Search All</a></li>
+                <li><a class="dropdown-item" href="searchCityPage">Search City</a></li>
+                <li><a class="dropdown-item" href="searchPlayerPage">Search Player</a></li>
+                <li><a class="dropdown-item" href="searchTeamPage">Search Team</a></li> 
+                <li><a class="dropdown-item" href="searchGameDetails">Search Game Details</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">&emsp;&emsp;Insert</a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="insert_player">Insert Player</a></li>
+                <li><a class="dropdown-item" href="insert_team">Insert Team</a></li>
+                <li><a class="dropdown-item" href="insert_games_details">Insert Game</a></li> 
+                <li><a class="dropdown-item" href="insert_ranking">Insert Ranking</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">&emsp;&emsp;Delete</a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="delete_player">Delete Player</a></li>
+                <li><a class="dropdown-item" href="delete_team">Delete Team</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">&emsp;&emsp;Update</a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="update_player">Update Player</a></li>
+                <li><a class="dropdown-item" href="update_team">Update Team</a></li>
+                <li><a class="dropdown-item" href="update_player_pts">Update Player Points</a></li>
+                <li><a class="dropdown-item" href="update_team_wins">Update Team Wins</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">&emsp;&emsp;Analytics</a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="top5_win_pct">Top 5 Team Wins</a></li>
+                <li><a class="dropdown-item" href="player_stat">Player Stats</a></li>
+                <li><a class="dropdown-item" href="home_team_stat">Home Team Stats</a></li>
+                <li><a class="dropdown-item" href="top_season_scorer">Top Team Scorer</a></li>
+                <li><a class="dropdown-item" href="compare_two_players">Compare Two Players</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="backup">&emsp;Backup Data</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link disabled"> &emsp; ---></a>
+            </li>
+          </ul>
+          <!-- <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form> -->
+        </div>
+      </div>
+    </nav>
+
+    <h1>3pt Made per Game (Career)</h1>
+      <div id="chart_div_player_stat"></div>
+
+    <!--Loads in teams obj from utils.py-->
+    {{3_pt_avg | json_script:"3pt-data"}}
+
+    <script>
+      google.charts.load('current', {packages: ['corechart', 'line']});
+      google.charts.setOnLoadCallback(drawBasic);
+
+      function drawBasic() {
+
+          var temp = JSON.parse(
+          document.getElementById("3pt-data").textContent);
+          let temp_data = [];
+          // temp_data.push(["Game", "3 Pointer Made"]);
+          for (var i = 0; i < temp.length; i++) {
+            temp_data.push([temp[i].game_id, parseInt(temp[i].made_3pt)]);
+          }
+
+        // temp_data.sort(function(a,b){return a[1] > b[1];});
+        // temp_data = temp_data.reverse()
+
+          console.log(temp_data);
+
+
+          var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Game');
+      data.addColumn('number', '3pt Made');
+
+      data.addRows(temp_data);
+
+      var options = {
+        hAxis: {
+          title: 'Time (Games)'
+        },
+        chartArea: {
+          width: '80%',
+          height: '80%',
+        },
+        vAxis: {
+          title: 'Popularity'
+        }
+      };
+
+      var chart = new google.visualization.LineChart(document.getElementById('chart_div_player_stat'));
+
+      chart.draw(data, options);
+    }
+
+      //     var temp = JSON.parse(
+      //     document.getElementById("3pt-data").textContent);
+      //     let temp_data = [];
+      //     temp_data.push(["Game", "3 Pointer Made"]);
+      //     for (var i = 0; i < temp.length; i++) {
+      //       temp_data.push([temp[i].game_id, parseInt(temp[i].made_3pt)]);
+      //     }
+      //
+      //   // temp_data.sort(function(a,b){return a[1] > b[1];});
+      //   // temp_data = temp_data.reverse()
+      //
+      //     console.log(temp_data);
+      //     var data = google.visualization.arrayToDataTable(temp_data);
+      //
+      //
+      //
+      //
+      //     // var data = new google.visualization.DataTable();
+      //
+      //     data.addColumn('number', 'X');
+      //     data.addColumn('number', '3 pointers Made');
+      // // data placement
+      //     data.addRows([[0,0], [1,1]])
+      //
+      //     var options = {
+      //       hAxis: {
+      //         title: 'Games'
+      //       },
+      //       vAxis: {
+      //         title: '3 pointer Made'
+      //       }
+      //     };
+      //
+      //   // var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+      //    var chart = new google.visualization.LineChart(document.getElementById("chart_div"));
+      //
+      //   chart.draw(data, options);
+      // }
+    </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  </body>
+</html>
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title></title>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <h1>-->
+<!--        Player Career Stat-->
+<!--    </h1>-->
+
+
+<!--&lt;!&ndash;Table for players details&ndash;&gt;-->
+<!--{% for x in 3_pt_avg %}-->
+<!--<table>-->
+<!--    <tr>-->
+<!--        <th>Career Stat</th>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--        <td>-->
+<!--            {{x.3_pt_career}}-->
+<!--        </td>-->
+
+<!--    </tr>-->
+<!--</table>-->
+<!--{% endfor %}-->
+<!--</body>-->
+<!--</html>-->
