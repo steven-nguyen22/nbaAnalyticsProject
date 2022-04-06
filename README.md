@@ -26,7 +26,7 @@
 1. Command line: python3 config/manage.py runserver (in IDE terminal)
 2. Open web browser, enter url: http://127.0.0.1:8000/
 3. If you encounter the following problem: 
-![problem](https://github.com/ucr-cs180-fall21/cs180project-021-team-wow/blob/main/potential%20error%20message.png)
+![problem](https://github.com/steven-nguyen22/nbaAnalyticsProject/blob/main/images/potential%20error%20message.png)
     - Open csvreadwrite.py in config -> pages -> src -> csvreadwrite.py
     - Remove the "../" (highlighted in the image) in lines 22, 51, 91, 105, and 128
  
