@@ -1,10 +1,25 @@
 
-# NBA Data Analytics
-## How to setup Django backend:
+# NBA Dataset Analytics
+## Project Description
+- This project was interesting to our group because we are all sports fans and wanted to work with a dataset that reflected an interest that the group shared. The main goal of this project was to allow users to search, enter, delete, update, backup, and perform interesting analytics on the given dataset. For this project we used HTML/CSS for the front-end and Python/Django for the back-end. Our analytics include displaying the top 5 team wins for a given season, displaying the 3 pts made for a given player, the average points scored between the home team vs the away team, displaying the top scorers of a given team for a season, and comparing the fg % for two different players. 
+- Dataset: https://www.kaggle.com/datasets/nathanlauga/nba-games
+
+## Team
+[Carlos Loeza](https://github.com/CarlosLoeza)
+
+[Jeff Nguyen](https://github.com/JeefKeef)
+
+[Brian Yang](https://github.com/brianyang9)
+
+[Gina Metzidaki](https://github.com/ginametzidaki)
+
+[Steven Nguyen](https://github.com/steven-nguyen22)
+
+## How to setup Django backend
 1. Download an IDE (Pycharm or Visual Studio Code)
 2. Make sure python3.9 is installed. https://www.python.org/downloads/ (only if using Visual Studio Code)
 3. Make sure the latest version of pip is installed. (run "python get-pip.py" in IDE terminal)
-4. Command line: git clone https://github.com/ucr-cs180-fall21/cs180project-021-team-wow.git (in IDE terminal)
+4. Command line: git clone https://github.com/steven-nguyen22/nbaAnalyticsProject.git (in IDE terminal)
 5. Command line: pip install -r requirements.txt (in IDE terminal)
 
 ## How to run server
@@ -25,12 +40,14 @@
 7. config/pages/src/utils.py - code for our backend functions
 8. config/pages/src/csvreadwrite.py - code that read/writes to our csv files
 
-## How to create a function
-1. Under the pages directory, the files views.py and urls.py will be used to create backend functions.
-2. views.py : where you write your function to view for front end. Reverse engineer if needed.
-3. urls.py : Under pages directory, NOT config directory, is where we initialize our function from views.py
-    path('front-end-function-name', file-name.function-name, name='function-name'), ````rename front-end-function-name to frontend action name(check index.html for example). Rename function-name to the function name in views.py,  rename file-name to .py filename consisting of function. 
-
-## If there is errors pulling from origin
-1. git fetch --all
-2. git reset --hard origin/{{your branch name}}
+## Screenshots
+Home Page
+![Home Page](https://github.com/steven-nguyen22/nbaAnalyticsProject/blob/main/images/homepage.png)
+Search Player Page
+![Search Player Page](https://github.com/steven-nguyen22/nbaAnalyticsProject/blob/main/images/searchPlayer.png)
+Update Team Wins Page
+![Update Team Wins Page](https://github.com/steven-nguyen22/nbaAnalyticsProject/blob/main/images/updateTeamWins.png)
+Top 5 Team Wins Table
+![Top 5 Team Wins Page](https://github.com/steven-nguyen22/nbaAnalyticsProject/blob/main/images/top5TeamWins.png)
+Compare Two Players
+![Compare Two Players](https://github.com/steven-nguyen22/nbaAnalyticsProject/blob/main/images/compare2Players.png)
